@@ -1,1 +1,3 @@
 venva/
+__pycache__/
+*.pyc
