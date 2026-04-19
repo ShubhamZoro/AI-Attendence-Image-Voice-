@@ -1,8 +1,61 @@
+from src.components.footer import footer_dashboard
 import streamlit as st
+from src.components.header import header_dashboard
+from src.ui.base_layout import style_base_layout,style_background_dashboard
 
 def teacher_screen():
-    st.title("Teacher Screen")
-    st.write("Teacher Screen")
+    
+    style_background_dashboard()
+    style_base_layout()
+    if 'teacher_login_type' not in st.session_state or st.session_state['teacher_login_type']=='login':
+        teacher_screen_login()
+    elif st.session_state['teacher_login_type']=='register':
+        teacher_screen_register()
 
-if __name__ == "__main__":
-    teacher_screen()
+def teacher_screen_login():
+    c1,c2=st.columns(2,vertical_alignment="center",gap='xxlarge')
+    with c1:
+        header_dashboard()
+    with c2:
+        if st.button("Go back to Home",type='secondary',key='loginbackbtn',shortcut="control+backspace"):
+            st.session_state['login_type']=None
+            st.rerun()
+    st.header("Login using password",text_alignment='center')
+    st.space()
+    teacher_username=st.text_input("Enter your Username",placeholder="shubham")
+    teacher_pass=st.text_input("Enter your Password",type="password",placeholder="Enter your password")
+    st.divider()
+    btnc1,btnc2=st.columns(2)
+    with btnc1:
+        st.button("Login Now",icon=':material/passkey:',shortcut='control+enter',width='stretch')
+    with btnc2:
+        if st.button("Register",icon=':material/passkey:',width='stretch'):
+            st.session_state['teacher_login_type']='register'
+    footer_dashboard()
+
+def teacher_screen_register():
+    c1,c2=st.columns(2,vertical_alignment="center",gap='xxlarge')
+    with c1:
+        header_dashboard()
+    with c2:
+        if st.button("Go back to Home",type='secondary',key='loginbackbtn',shortcut="control+backspace"):
+            st.session_state['login_type']=None
+            st.rerun()
+    st.header("Register your teacher profile",text_alignment='center')
+    st.space()
+    
+    teacher_username=st.text_input("Enter your Username",placeholder="shubham")
+    teacher_name=st.text_input("Enter your Name",placeholder="Shubham Shekhar")
+    
+    teacher_pass=st.text_input("Enter your Password",type="password",placeholder="Enter your password")
+    teacher_pass_confirm=st.text_input("Confirm your Password",type="password",placeholder="Enter your password")
+    st.divider()
+    btnc1,btnc2=st.columns(2)
+    with btnc1:
+        st.button("Register Now",icon=':material/passkey:',shortcut='control+enter',width='stretch')
+    with btnc2:
+        if st.button("Login",icon=':material/passkey:',width='stretch',type='primary'):
+            st.session_state['teacher_login_type']='login'
+    footer_dashboard()
+    
+
