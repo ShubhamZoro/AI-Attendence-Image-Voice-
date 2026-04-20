@@ -30,3 +30,7 @@ def teacher_login(username,password):
 
 def check_pass(password,hashed_password):
     return bcrypt.checkpw(password.encode(),hashed_password.encode())
+
+def get_all_students():
+    response=supabase.table("students").select("*").execute()
+    return response.data
