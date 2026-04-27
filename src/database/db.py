@@ -34,3 +34,12 @@ def check_pass(password,hashed_password):
 def get_all_students():
     response=supabase.table("students").select("*").execute()
     return response.data
+
+def create_student(name,face_emb=None,voice_emb=None):
+    data={
+        "name":name,
+        "face_embedding":face_emb,
+        "voice_embedding":voice_emb
+    }
+    response=supabase.table("students").insert(data).execute()
+    return response.data

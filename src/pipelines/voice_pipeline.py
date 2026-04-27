@@ -1,8 +1,9 @@
-from resemblyzer import preprocess_wav, VoiceEncoder
-import numpy as np
+from resemblyzer import VoiceEncoder, preprocess_wav
+import numpy as np 
 import io
 import librosa
 import streamlit as st
+
 
 @st.cache_resource
 def load_voice_encoder():
@@ -12,13 +13,15 @@ def load_voice_encoder():
 def get_voice_embedding(audio_bytes):
     try:
         encoder = load_voice_encoder()
-        audio,sr=librosa.load(io.BytesIO(audio_bytes),sr=16000)
-        wav=preprocess_wav(audio)
-        embedding=encoder.embed_utterance(wav)
+
+        audio, sr = librosa.load(io.BytesIO(audio_bytes), sr=16000)
+        wav = preprocess_wav(audio)
+        embedding = encoder.embed_utterance(wav)
         return embedding.tolist()
     except Exception as e:
-        st.error(f"voice recog error")
+        st.error('Voice recog error')
         return None
+    
 
 def identify_speaker(new_embedding, candidates_dict, threshold=0.65):
     if new_embedding is None or not candidates_dict:
