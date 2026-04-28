@@ -17,8 +17,68 @@ def teacher_screen():
 
 def teacher_dashboard():
     teacher_data=st.session_state['teacher_data']
-    st.header(f"Welcome {teacher_data['username']}",text_alignment='center')
+    c1,c2=st.columns(2,vertical_alignment="center",gap='xxlarge')
+    with c1:
+        header_dashboard()
+    with c2:
+        st.subheader(f"Welcome {teacher_data['username']}",text_alignment='center')
+        if st.button("Logout",icon=':material/logout:',type='primary',width='stretch',key='loginbackbtn',shortcut="control+backspace"):
+            st.session_state['login_type']=None
+            st.session_state.is_logged_in=False
+            
+            del st.session_state.teacher_data
+            st.rerun()
+    st.space()
+    if "current_teacher_tab" not in st.session_state:
+        st.session_state["current_teacher_tab"]='take_attendance'
+    tab1,tab2,tab3=st.columns(3)
+    with tab1:
+        type1="primary" if st.session_state.current_teacher_tab=='take_attendance' else 'tertiary'
+        if st.button('Take Attendance',width='stretch',icon=':material/ar_on_you:',type=type1):
+            st.session_state["current_teacher_tab"]='take_attendance'
+            st.rerun()
     
+    with tab2:
+        type2="primary" if st.session_state.current_teacher_tab=='manage_subjects' else 'tertiary'
+        if st.button('Manage Subjects',width='stretch',icon=':material/book_ribbon:',type=type2):
+            st.session_state["current_teacher_tab"]='manage_subjects'
+            st.rerun()
+
+    with tab3:
+        type3="primary" if st.session_state.current_teacher_tab=='attendence_records' else 'tertiary'
+        if st.button('Attendance Records',width='stretch',icon=':material/cards_stack:',type=type3):
+            st.session_state["current_teacher_tab"]='attendence_records'
+            st.rerun()
+
+    st.divider()
+
+    if st.session_state.current_teacher_tab=='take_attendance':
+        teacher_tab_take_attendance()
+    if st.session_state.current_teacher_tab=='manage_subjects':
+        teacher_tab_manage_subjects()
+    if st.session_state.current_teacher_tab=='attendence_records':
+        teacher_tab_attendence_records()
+    
+
+    
+    footer_dashboard()
+    
+def teacher_tab_take_attendance():
+    st.header("Take AI Attendence")  
+
+def teacher_tab_manage_subjects():
+    teacher_id=st.session_state.teacher_data['teacher_id']
+    col1,col2=st.columns(2)
+    with col1:
+        st.header("Manage Subjects",width='stretch')
+    with col2:
+        if st.button("create New Subject",width='stretch'):
+            create_subject_dialog(teacher_id)
+    
+
+def teacher_tab_attendence_records():
+    st.header("Attendance Records")    
+
 
 def register_teacher(teacher_username,teacher_name,teacher_pass,teacher_pass_confirm):
     if not teacher_username or not teacher_name or not teacher_pass or not teacher_pass_confirm:
