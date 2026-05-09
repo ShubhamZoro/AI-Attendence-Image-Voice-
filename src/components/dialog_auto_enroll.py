@@ -11,7 +11,7 @@ def auto_enroll_dialog(subject_code):
 
 
     res = supabase.table('subjects').select('subject_id, name').eq('subject_code', subject_code).execute()
-    st.header(f"{len(res.data)}")
+    
     if not res.data:
         st.error('Subject Code not found!')
         if st.button('Close'):
